@@ -8,7 +8,7 @@ export enum ConfigEnum {
   DB_SYNC = 'DB_SYNC',
 }
 
-export const LogEnum = {
-  LOG_ON: 'LOG_ON',
-  LOG_LEVEL: 'LOG_LEVEL',
+export enum LogEnum {
+  LOG_ON = 'LOG_ON',
+  LOG_LEVEL = 'LOG_LEVEL',
 }

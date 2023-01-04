@@ -7,9 +7,9 @@ import { AllExceptionsFilter } from './filter/all-exceptionsFilter'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
   const httpAdapter = app.get(HttpAdapterHost)
   app.useGlobalFilters(new AllExceptionsFilter(Logger, httpAdapter))
+  app.setGlobalPrefix('/api/v1')
   await app.listen(3000)
 }
 bootstrap()

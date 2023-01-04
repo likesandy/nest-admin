@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Logs } from '../logs/entities/logs.entity'
 import { CreateUserDto } from './dto/create-user.dto'
+import { getUserDto } from './dto/get-user.dto'
 import { User } from './entities/user.entity'
 
 @Injectable()
@@ -22,6 +23,7 @@ export class UserService {
   remove(id: number) {
     return this.userRepository.delete({ id })
   }
+
   update(id: number, updateUserDto: CreateUserDto) {
     return this.userRepository.update(id, updateUserDto)
   }
@@ -30,8 +32,34 @@ export class UserService {
     return this.userRepository.findOne({ where: { username } })
   }
 
-  findAll() {
-    return this.userRepository.find()
+  findAll(query: getUserDto) {
+    const { page, limit, username, role, gender } = query
+    const take = limit || 10
+    const skip = ((page || 1) - 1) * take
+    return this.userRepository.find({
+      select: {
+        id: true,
+        username: true,
+        profile: {
+          gender: true,
+        },
+      },
+      relations: {
+        profile: true,
+        roles: true,
+      },
+      where: {
+        username,
+        roles: {
+          id: role,
+        },
+        profile: {
+          gender,
+        },
+      },
+      take,
+      skip,
+    })
   }
 
   findOne(id: number) {
