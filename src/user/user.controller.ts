@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, Post, Query, UseFilters } from '@nestjs/common'
+import { TypeormFilter } from 'src/filter/typeorm.filter'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getUserDto } from './dto/get-user.dto'
 import { UserService } from './user.service'
 
+@UseFilters(TypeormFilter)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -13,8 +15,8 @@ export class UserController {
     return this.userService.findAll(query)
   }
 
-  // 添加用户
-  @Post('/add')
+  // 创建用户
+  @Post('/create')
   addUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto)
   }

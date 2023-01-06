@@ -28,38 +28,44 @@ export class UserService {
     return this.userRepository.update(id, updateUserDto)
   }
 
-  find(username: string) {
-    return this.userRepository.findOne({ where: { username } })
-  }
-
   findAll(query: getUserDto) {
     const { page, limit, username, role, gender } = query
     const take = limit || 10
     const skip = ((page || 1) - 1) * take
-    return this.userRepository.find({
-      select: {
-        id: true,
-        username: true,
-        profile: {
-          gender: true,
-        },
-      },
-      relations: {
-        profile: true,
-        roles: true,
-      },
-      where: {
-        username,
-        roles: {
-          id: role,
-        },
-        profile: {
-          gender,
-        },
-      },
-      take,
-      skip,
-    })
+    // * 查询条件
+    // https://typeorm.io/#/find-options
+    // return this.userRepository.find({
+    //   select: {
+    //     id: true,
+    //     username: true,
+    //   },
+    //   relations: {
+    //     profile: true,
+    //     roles: true,
+    //   },
+    //   where: {
+    //     username,
+    //     roles: {
+    //       id: role,
+    //     },
+    //     profile: {
+    //       gender,
+    //     },
+    //   },
+    //   take,
+    //   skip,
+    // })
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.roles', 'roles')
+      .where('user.username =  :username', { username })
+      .andWhere('roles.id = :role', { role })
+      .andWhere('profile.gender = :gender', { gender })
+      .take()
+      .skip()
+      .select(['user.id', 'user.username', 'profile', 'roles'])
+      .getMany()
   }
 
   findOne(id: number) {

@@ -1,4 +1,12 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 import { Logs } from '../../logs/entities/logs.entity'
 import { Roles } from '../../roles/entities/role.entity'
 import { Profile } from './profile.entity'
@@ -8,7 +16,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  // 唯一索引
+  @Column({ unique: true })
   username: string
 
   @Column()
