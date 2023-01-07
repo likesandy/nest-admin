@@ -20,12 +20,30 @@ export class UserService {
     return this.userRepository.save(user)
   }
 
-  remove(id: number) {
+  findOne(id: number) {
+    return this.userRepository.find({ where: { id } })
+  }
+
+  // delete删除用户(通过应该id删除一个或多个实例(硬删除)直接从数据库中删除)
+  delete(id: number) {
     return this.userRepository.delete({ id })
   }
 
-  update(id: number, updateUserDto: CreateUserDto) {
-    return this.userRepository.update(id, updateUserDto)
+  // remove可以删除一个或多个实例,并且remove可以触发TypeORM的生命周期钩子
+  async remove(id: number) {
+    const user = await this.findOne(id)
+    return this.userRepository.remove(user)
+  }
+
+  // 修改用户
+  async patch(id: number, user: Partial<User>) {
+    const userTemp = await this.findProfile(id)
+    const newUser = this.userRepository.merge(userTemp, user)
+    // 联合查询更新,需要使用save方法或者queryBuilder
+    return this.userRepository.save(newUser)
+
+    // update方法只适合单模型的更新,不适合有关系的模型更新
+    // return this.userRepository.update(id, user)
   }
 
   findAll(query: getUserDto) {
@@ -68,13 +86,9 @@ export class UserService {
       .getMany()
   }
 
-  findOne(id: number) {
-    return this.userRepository.find({ where: { id } })
-  }
-
   // * 联合查询
   findProfile(id: number) {
-    return this.userRepository.find({
+    return this.userRepository.findOne({
       where: {
         id,
       },

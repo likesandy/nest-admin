@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, Query, UseFilters } from '@nestjs/common'
+import { Body, Controller, Get, Param, Patch, Post, Query, UseFilters } from '@nestjs/common'
 import { TypeormFilter } from 'src/filter/typeorm.filter'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getUserDto } from './dto/get-user.dto'
+import { User } from './entities/user.entity'
 import { UserService } from './user.service'
 
 @UseFilters(TypeormFilter)
@@ -24,6 +25,18 @@ export class UserController {
   @Get('/profile')
   getProfile(@Query('id') id: number) {
     return this.userService.findProfile(id)
+  }
+
+  // 修改用户
+  @Patch('/:id')
+  patch(@Body() dto: any, @Param('id') id: number) {
+    const user = dto as User
+    /**
+     * "Property \"profile.address\" was not found in \"User\". Make sure your query is correct."
+     * tpyorm cascade
+     * @see https://typeorm.io/#/relations-faq/cascade-relations
+     */
+    return this.userService.patch(id, user)
   }
 
   @Get('/log')
