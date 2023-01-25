@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import * as argon2 from 'argon2'
 import { Repository } from 'typeorm'
 import { Logs } from '../logs/entities/logs.entity'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -21,7 +22,10 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepository.create(createUserDto)
-    return this.userRepository.save(user)
+
+    user.password = await argon2.hash(user.password)
+
+    return await this.userRepository.save(user)
   }
 
   findOne(id: number) {

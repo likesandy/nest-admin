@@ -8,8 +8,16 @@ import { SigninUserDto } from './dto/signin.dto'
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  // 注册
+  @Post('signup')
+  signUp(@Body() dto: SigninUserDto) {
+    const { username, password } = dto
+    return this.authService.signup(username, password)
+  }
+
+  // 登录
   @Post('signin')
-  async signin(@Body() dto: SigninUserDto) {
+  async signIn(@Body() dto: SigninUserDto) {
     const { username, password } = dto
     const token = await this.authService.signin(username, password)
     return { token }
