@@ -15,6 +15,10 @@ export class UserService {
     private logsRepository: Repository<Logs>,
   ) {}
 
+  find(username: string) {
+    return this.userRepository.findOne({ where: { username }, relations: ['roles'] })
+  }
+
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepository.create(createUserDto)
     return this.userRepository.save(user)

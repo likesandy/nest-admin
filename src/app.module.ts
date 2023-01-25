@@ -7,6 +7,7 @@ import { AppService } from './app.service'
 import { LogsModule } from './logs/logs.module'
 import { RolesModule } from './roles/roles.module'
 import { UserModule } from './user/user.module'
+import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv'
 import * as Joi from 'joi'
 
@@ -26,6 +27,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
     UserModule,
     RolesModule,
     LogsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

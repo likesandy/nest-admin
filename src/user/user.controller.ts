@@ -1,10 +1,22 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UseFilters } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common'
 import { TypeormFilter } from 'src/filter/typeorm.filter'
+import { JwtGuard } from 'src/guard/jwt.guard'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getUserDto } from './dto/get-user.dto'
 import { User } from './entities/user.entity'
 import { UserService } from './user.service'
 
+@UseGuards(JwtGuard)
 @UseFilters(TypeormFilter)
 @Controller('user')
 export class UserController {
