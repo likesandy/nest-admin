@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer'
 import {
   Column,
   Entity,
@@ -21,6 +22,7 @@ export class User {
   username: string
 
   @Column()
+  @Exclude()
   password: string
 
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })

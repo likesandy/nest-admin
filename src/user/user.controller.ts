@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
@@ -8,7 +9,9 @@ import {
   Query,
   UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common'
+import { classToClassFromExist } from 'class-transformer'
 import { TypeormFilter } from 'src/filter/typeorm.filter'
 import { JwtGuard } from 'src/guard/jwt.guard'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -18,6 +21,7 @@ import { UserService } from './user.service'
 
 @UseGuards(JwtGuard)
 @UseFilters(TypeormFilter)
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -35,7 +39,7 @@ export class UserController {
   }
 
   @Get('/profile')
-  getProfile(@Query('id') id: number) {
+  getProfile(@Query('id') id: number): Promise<User> {
     return this.userService.findProfile(id)
   }
 
