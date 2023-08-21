@@ -54,10 +54,10 @@ export class UserService {
     // return this.userRepository.update(id, user)
   }
 
-  findAll(query: getUserDto) {
-    const { page, limit, username, role, gender } = query
-    const take = limit || 10
-    const skip = ((page || 1) - 1) * take
+  async findAll({ page, limit }: getUserDto) {
+    // const { page, limit, username, role, gender } = query
+    // const take = limit || 10
+    // const skip = ((page || 1) - 1) * take
     // * 查询条件
     // https://typeorm.io/#/find-options
     // return this.userRepository.find({
@@ -81,17 +81,27 @@ export class UserService {
     //   take,
     //   skip,
     // })
-    return this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.profile', 'profile')
-      .leftJoinAndSelect('user.roles', 'roles')
-      .where('user.username =  :username', { username })
-      .andWhere('roles.id = :role', { role })
-      .andWhere('profile.gender = :gender', { gender })
-      .take()
-      .skip()
-      .select(['user.id', 'user.username', 'profile', 'roles'])
-      .getMany()
+    // return this.userRepository
+    //   .createQueryBuilder('user')
+    //   .leftJoinAndSelect('user.profile', 'profile')
+    //   .leftJoinAndSelect('user.roles', 'roles')
+    //   .where('user.username =  :username', { username })
+    //   .andWhere('roles.id = :role', { role })
+    //   .andWhere('profile.gender = :gender', { gender })
+    //   .take()
+    //   .skip()
+    //   .select(['user.id', 'user.username', 'profile', 'roles'])
+    //   .getMany()
+    const [data, count] = await this.userRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit * 1,
+      cache: true,
+    })
+
+    return {
+      data,
+      count,
+    }
   }
 
   // * 联合查询

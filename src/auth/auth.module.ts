@@ -13,7 +13,6 @@ import { JwtStrategy } from './auth.strategy'
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        console.log(configService.get<string>(ConfigEnum.SECRET))
         return {
           secret: configService.get<string>(ConfigEnum.SECRET),
           signOptions: {

@@ -1,15 +1,36 @@
 // main.ts
-import { Logger } from '@nestjs/common'
-import { HttpAdapterHost, NestFactory } from '@nestjs/core'
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
+import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { join } from 'path'
 import { AppModule } from './app.module'
-import { AllExceptionsFilter } from './filter/all-exceptionsFilter'
+import { NestExpressApplication } from '@nestjs/platform-express'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
   // const httpAdapter = app.get(HttpAdapterHost)
   // app.useGlobalFilters(new AllExceptionsFilter(Logger, httpAdapter))
-  app.setGlobalPrefix('/api/v1')
+
+  const options = new DocumentBuilder()
+    .setTitle('Cats example')
+    .setDescription('The cats API description')
+    .setVersion('1.0')
+    .addTag('cats')
+    .build()
+  const document = SwaggerModule.createDocument(app, options)
+  SwaggerModule.setup('/api', app, document)
+
+  // 开启静态资源
+  const uploadDir =
+    !!process.env.UPLOAD_DIR && process.env.UPLOAD_DIR !== ''
+      ? process.env.UPLOAD_DIR
+      : join(__dirname, '../..', 'static/upload')
+  console.log(uploadDir)
+
+  app.useStaticAssets(uploadDir, {
+    prefix: '/static/upload',
+  })
+
+  // app.setGlobalPrefix('/api/v1')
   await app.listen(3000)
 }
 bootstrap()
