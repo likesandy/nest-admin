@@ -6,6 +6,7 @@ import { Logs } from '../logs/entities/logs.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getUserDto } from './dto/get-user.dto'
 import { User } from './entities/user.entity'
+import { cryptoPassword, makeSalt } from 'src/share/utils/cryptoGather.util'
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,12 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepository.create(createUserDto)
 
-    user.password = await argon2.hash(user.password)
+    // 加密处理
+    if (user.password) {
+      const { salt, hashPassword } = this.getPassword(user.password)
+      user.salt = salt
+      user.password = hashPassword
+    }
 
     return await this.userRepository.save(user)
   }
@@ -147,5 +153,11 @@ export class UserService {
       'select logs.result as result ,count(*) as count from logs where logs.userId = ? group by result order by count desc',
       [id],
     )
+  }
+
+  getPassword(password) {
+    const salt = makeSalt()
+    const hashPassword = cryptoPassword(password, salt)
+    return { salt, hashPassword }
   }
 }

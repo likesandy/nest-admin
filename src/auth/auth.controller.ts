@@ -1,25 +1,23 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common'
-import { JwtGuard } from 'src/guard/jwt.guard'
+import { Body, Controller, Post } from '@nestjs/common'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
-import { SigninUserDto } from './dto/signin.dto'
+import { LoginDTO } from './dto/login.dto'
 
+@ApiTags('认证鉴权')
 @Controller('auth')
 // @UseGuards(JwtGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // 注册
-  @Post('signup')
-  signUp(@Body() dto: SigninUserDto) {
-    const { username, password } = dto
-    return this.authService.signup(username, password)
-  }
+
 
   // 登录
-  @Post('signin')
-  async signIn(@Body() dto: SigninUserDto) {
-    const { username, password } = dto
-    const token = await this.authService.signin(username, password)
+  @ApiOperation({
+    summary: '用户登录',
+  })
+  @Post('login')
+  async signIn(@Body() loginDto: LoginDTO) {
+    const token = await this.authService.login(loginDto)
     return { token }
   }
 }

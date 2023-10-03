@@ -11,6 +11,7 @@ import {
 import { Logs } from '../../logs/entities/logs.entity'
 import { Roles } from '../../roles/entities/role.entity'
 import { Profile } from './profile.entity'
+import { ApiProperty } from '@nestjs/swagger'
 
 @Entity()
 export class User {
@@ -38,4 +39,11 @@ export class User {
   @ManyToMany(() => Roles, (roles) => roles.user)
   @JoinTable({ name: 'user_roles' })
   roles: Roles[]
+
+  // 加密盐
+  @Column({
+    type: 'text',
+    select: false,
+  })
+  salt: string
 }

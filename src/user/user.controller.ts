@@ -11,7 +11,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
-import { classToClassFromExist } from 'class-transformer'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { TypeormFilter } from 'src/filter/typeorm.filter'
 import { JwtGuard } from 'src/guard/jwt.guard'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -19,9 +19,10 @@ import { getUserDto } from './dto/get-user.dto'
 import { User } from './entities/user.entity'
 import { UserService } from './user.service'
 
-@UseGuards(JwtGuard)
+// @UseGuards(JwtGuard)
 @UseFilters(TypeormFilter)
 @UseInterceptors(ClassSerializerInterceptor)
+@ApiTags('用户管理')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -33,8 +34,11 @@ export class UserController {
   }
 
   // 创建用户
-  @Post('/create')
-  addUser(@Body() createUserDto: CreateUserDto) {
+  @Post()
+  @ApiOperation({
+    summary: '新增用户',
+  })
+  create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto)
   }
 
