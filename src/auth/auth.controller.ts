@@ -8,16 +8,12 @@ import { LoginDTO } from './dto/login.dto'
 // @UseGuards(JwtGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
-
-
-
   // 登录
   @ApiOperation({
     summary: '用户登录',
   })
   @Post('login')
   async signIn(@Body() loginDto: LoginDTO) {
-    const token = await this.authService.login(loginDto)
-    return { token }
+    return await this.authService.login(loginDto)
   }
 }

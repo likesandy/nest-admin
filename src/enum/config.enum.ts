@@ -6,7 +6,8 @@ export enum ConfigEnum {
   DB_USERNAME = 'DB_USERNAME',
   DB_PASSWORD = 'DB_PASSWORD',
   DB_SYNC = 'DB_SYNC',
-  SECRET = 'SECRET',
+  JWT_SECRET = 'JWT_SECRET',
+  JWT_EXPIRES_IN = 'JWT_EXPIRES_IN',
 }
 
 export enum LogEnum {

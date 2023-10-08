@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer'
 import {
   Column,
   Entity,
@@ -11,7 +10,6 @@ import {
 import { Logs } from '../../logs/entities/logs.entity'
 import { Roles } from '../../roles/entities/role.entity'
 import { Profile } from './profile.entity'
-import { ApiProperty } from '@nestjs/swagger'
 
 @Entity()
 export class User {
@@ -23,7 +21,6 @@ export class User {
   username: string
 
   @Column()
-  @Exclude()
   password: string
 
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })

@@ -8,12 +8,10 @@ import {
   Post,
   Query,
   UseFilters,
-  UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { TypeormFilter } from 'src/filter/typeorm.filter'
-import { JwtGuard } from 'src/guard/jwt.guard'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getUserDto } from './dto/get-user.dto'
 import { User } from './entities/user.entity'

@@ -16,8 +16,10 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('cats')
     .build()
+
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup('/api', app, document)
+  app.enableCors()
 
   // 开启静态资源
   const uploadDir =
@@ -30,7 +32,6 @@ async function bootstrap() {
     prefix: '/static/upload',
   })
 
-  // app.setGlobalPrefix('/api/v1')
   await app.listen(3000)
 }
 bootstrap()

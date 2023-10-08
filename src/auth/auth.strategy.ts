@@ -8,10 +8,11 @@ import { ConfigEnum } from 'src/enum/config.enum'
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigService) {
+    console.log(configService.get(ConfigEnum.JWT_SECRET))
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get(ConfigEnum.SECRET),
+      secretOrKey: configService.get(ConfigEnum.JWT_SECRET),
     })
   }
 

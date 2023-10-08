@@ -11,7 +11,7 @@ export class LoginDTO {
     // $constraint1: 最小长度 ...
     message: `用户名长度必须在$constraint1到$constraint2之间，当前传递的值是：$value`,
   })
-  @ApiProperty({ example: 'tao3', description: '用户名' })
+  @ApiProperty({ example: 'admin', description: '用户名' })
   username: string
 
   @IsString()

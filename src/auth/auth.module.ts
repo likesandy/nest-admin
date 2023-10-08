@@ -16,9 +16,9 @@ import { User } from 'src/user/entities/user.entity'
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          secret: configService.get<string>(ConfigEnum.SECRET),
+          secret: configService.get<string>(ConfigEnum.JWT_SECRET),
           signOptions: {
-            expiresIn: '1d',
+            expiresIn: configService.get<string>(ConfigEnum.JWT_EXPIRES_IN),
           },
         }
       },

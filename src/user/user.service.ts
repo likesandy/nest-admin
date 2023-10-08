@@ -6,7 +6,7 @@ import { Logs } from '../logs/entities/logs.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getUserDto } from './dto/get-user.dto'
 import { User } from './entities/user.entity'
-import { cryptoPassword, makeSalt } from 'src/share/utils/cryptoGather.util'
+import { cryptoPassword, makeSalt } from 'src/share/utils/cryptogram.util'
 
 @Injectable()
 export class UserService {
@@ -21,9 +21,8 @@ export class UserService {
     return this.userRepository.findOne({ where: { username }, relations: ['roles'] })
   }
 
-  async create(createUserDto: CreateUserDto) {
-    const user = await this.userRepository.create(createUserDto)
-
+  // 基于哈希技术的敏感信息加密+密码加盐
+  create(user: CreateUserDto) {
     // 加密处理
     if (user.password) {
       const { salt, hashPassword } = this.getPassword(user.password)
@@ -31,7 +30,17 @@ export class UserService {
       user.password = hashPassword
     }
 
-    return await this.userRepository.save(user)
+    return this.userRepository.save(user)
+  }
+
+  update(id: string, user: CreateUserDto) {
+    if (user.password) {
+      const { salt, hashPassword } = this.getPassword(user.password)
+      user.salt = salt
+      user.password = hashPassword
+    }
+
+    return this.userRepository.update(id, user)
   }
 
   findOne(id: number) {
@@ -155,7 +164,7 @@ export class UserService {
     )
   }
 
-  getPassword(password) {
+  getPassword(password: string) {
     const salt = makeSalt()
     const hashPassword = cryptoPassword(password, salt)
     return { salt, hashPassword }

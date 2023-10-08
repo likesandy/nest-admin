@@ -5,7 +5,7 @@ import { ensureDir, outputFile, readFile } from 'fs-extra'
 import { join } from 'path'
 import { Repository } from 'typeorm'
 import { Upload } from './entities/upload.entity'
-import { cryptoFileHash } from 'src/share/utils/cryptoGather.util'
+import { cryptoFileHash } from 'src/share/utils/cryptogram.util'
 
 @Injectable()
 export class UploadService {
