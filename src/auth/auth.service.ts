@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { InjectRepository } from '@nestjs/typeorm'
 import { cryptoPassword } from 'src/share/utils/cryptogram.util'
 import { User } from 'src/user/entities/user.entity'
 import { Repository } from 'typeorm'
@@ -9,7 +8,7 @@ import { LoginDTO } from './dto/login.dto'
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    @InjectRepository(User)
+    @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
   ) {}
 

@@ -1,6 +1,7 @@
 // orm.config.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { Logs } from 'src/logs/entities/logs.entity'
+import { Menu } from 'src/menu/entities/menu.entity'
 import { Roles } from 'src/roles/entities/role.entity'
 import { Profile } from 'src/user/entities/profile.entity'
 import { User } from 'src/user/entities/user.entity'
@@ -21,7 +22,7 @@ export const ormConfig = {
   password: 'admin',
   database: 'nest',
   synchronize: true,
-  entities: [Logs, User, Roles, Profile],
+  entities: [Logs, User, Roles, Profile, Menu],
   logging: false,
 } as TypeOrmModuleOptions
 

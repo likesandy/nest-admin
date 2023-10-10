@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import * as argon2 from 'argon2'
 import { Repository } from 'typeorm'
@@ -11,9 +11,9 @@ import { cryptoPassword, makeSalt } from 'src/share/utils/cryptogram.util'
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
+    @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
-    @InjectRepository(Logs)
+    @Inject('LOG_REPOSITORY')
     private logsRepository: Repository<Logs>,
   ) {}
 

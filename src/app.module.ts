@@ -1,16 +1,17 @@
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import * as dotenv from 'dotenv'
+import * as Joi from 'joi'
 import { ormConfig } from '../orm.config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { AuthModule } from './auth/auth.module'
 import { LogsModule } from './logs/logs.module'
+import { MenuModule } from './menu/menu.module'
 import { RolesModule } from './roles/roles.module'
+import { UploadModule } from './upload/upload.module'
 import { UserModule } from './user/user.module'
-import { AuthModule } from './auth/auth.module';
-import { UploadModule } from './upload/upload.module';
-import * as dotenv from 'dotenv'
-import * as Joi from 'joi'
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
 
@@ -30,6 +31,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
     LogsModule,
     AuthModule,
     UploadModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

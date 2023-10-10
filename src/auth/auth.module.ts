@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
+import { DatabaseModule } from 'src/db/database.module'
 import { ConfigEnum } from 'src/enum/config.enum'
+import { UserProviders } from 'src/user/user.providers'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { JwtStrategy } from './auth.strategy'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from 'src/user/entities/user.entity'
 
 @Module({
   imports: [
@@ -24,9 +24,9 @@ import { User } from 'src/user/entities/user.entity'
       },
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User]),
+    DatabaseModule,
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, ...UserProviders],
   controllers: [AuthController],
 })
 export class AuthModule {}
