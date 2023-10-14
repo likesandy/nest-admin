@@ -8,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 import { Logs } from '../../logs/entities/logs.entity'
-import { Roles } from '../../roles/entities/role.entity'
 import { Profile } from './profile.entity'
 
 @Entity()
@@ -33,9 +32,9 @@ export class User {
 
   // * 多对多关联
   // https://typeorm.io/many-to-many-relations
-  @ManyToMany(() => Roles, (roles) => roles.user)
-  @JoinTable({ name: 'user_roles' })
-  roles: Roles[]
+  // @ManyToMany(() => Roles, (roles) => roles.user)
+  // @JoinTable({ name: 'user_roles' })
+  // roles: Roles[]
 
   // 加密盐
   @Column({
